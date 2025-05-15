@@ -103,6 +103,64 @@ export function createBot(token: string) {
     }
   });
 
+  // Handle text messages (UID input)
+  bot.on("text", async (ctx) => {
+    // Skip commands
+    if (ctx.message.text.startsWith("/")) return;
+    if (userState.get(ctx.from!.id) !== "AWAITING_UID") return;
+
+    const lang = ctx.from?.language_code || "en";
+
+    try {
+      // Get the UID from the message
+      const uid = ctx.message.text.trim();
+
+      // Check if the user already has a UID
+      const existingUser = await db.getUserByTelegramId(ctx.from!.id);
+
+      if (existingUser?.uid) {
+        // User already has a UID, they cannot change it
+        await ctx.reply(i18n(lang, "cannotChangeUid"));
+        userState.delete(ctx.from!.id);
+        return;
+      }
+
+      // Check if UID already exists in the database
+      const uidUser = await db.getUserByUid(uid);
+
+      if (uidUser?.telegram_id) {
+        // UID is already associated with another Telegram ID
+        await ctx.reply(i18n(lang, "uidAlreadyUsed"));
+        userState.delete(ctx.from!.id);
+        return;
+      }
+
+      // Save the user with UID
+      await db.saveUser({
+        telegram_id: ctx.from!.id,
+        uid: uid,
+      });
+
+      // Refresh user data
+      ctx.user = await db.getUserByTelegramId(ctx.from!.id);
+
+      await ctx.reply(i18n(lang, "uidSaved"));
+
+      // Optionally check for the threshold and send invite
+      const threshold = await db.getThreshold();
+      if (db.getTotalBalance(ctx.user) >= threshold) {
+        const link = await createInviteLink(process.env.GROUP_ID!);
+        await ctx.reply(i18n(lang, "inviteSent"));
+        await ctx.reply(link);
+      } else {
+        await ctx.reply(i18n(lang, "belowThreshold"));
+      }
+    } catch (error) {
+      console.error("Error processing UID input:", error);
+      await ctx.reply(i18n(lang, "error"));
+    }
+    userState.delete(ctx.from!.id);
+  });
   // Admin commands
   bot.command("setthreshold", async (ctx) => {
     if (ctx.chat.type !== "private") return;  // Skip if not a private chat
