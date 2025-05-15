@@ -82,8 +82,8 @@ export function createBot(token: string) {
 
   // Start command
   bot.start(async (ctx) => {
-    if (ctx.chat.type !== "private") return;  // Skip if not a private chat
-    
+    if (ctx.chat.type !== "private") return; // Skip if not a private chat
+
     const lang = ctx.from?.language_code || "en";
 
     await ctx.reply(i18n(lang, "greeting"));
@@ -139,6 +139,8 @@ export function createBot(token: string) {
       await db.saveUser({
         telegram_id: ctx.from!.id,
         uid: uid,
+        username: ctx.from.username,
+        name: `${ctx.from.first_name} ${ctx.from.last_name || ""}`.trim(),
       });
 
       // Refresh user data
@@ -163,8 +165,8 @@ export function createBot(token: string) {
   });
   // Admin commands
   bot.command("setthreshold", async (ctx) => {
-    if (ctx.chat.type !== "private") return;  // Skip if not a private chat
-    
+    if (ctx.chat.type !== "private") return; // Skip if not a private chat
+
     const lang = ctx.from?.language_code || "en";
 
     if (!isAdmin(ctx)) {
@@ -189,16 +191,16 @@ export function createBot(token: string) {
   });
 
   bot.command("threshold", async (ctx) => {
-    if (ctx.chat.type !== "private") return;  // Skip if not a private chat
-    
+    if (ctx.chat.type !== "private") return; // Skip if not a private chat
+
     const lang = ctx.from?.language_code || "en";
     const threshold = await db.getThreshold();
     await ctx.reply(i18n(lang, "currentThreshold", threshold));
   });
 
   bot.command("addadmin", async (ctx) => {
-    if (ctx.chat.type !== "private") return;  // Skip if not a private chat
-    
+    if (ctx.chat.type !== "private") return; // Skip if not a private chat
+
     const lang = ctx.from?.language_code || "en";
 
     if (!isAdmin(ctx)) {
@@ -223,8 +225,8 @@ export function createBot(token: string) {
   });
 
   bot.command("stats", async (ctx) => {
-    if (ctx.chat.type !== "private") return;  // Skip if not a private chat
-    
+    if (ctx.chat.type !== "private") return; // Skip if not a private chat
+
     const lang = ctx.from?.language_code || "en";
 
     if (!isAdmin(ctx)) {
@@ -236,17 +238,17 @@ export function createBot(token: string) {
 
     await ctx.reply(
       `📊 Bot Statistics:\n\n` +
-      `Total users: ${stats.totalUsers}\n` +
-      `Joined users: ${stats.joinedUsers}\n` +
-      `Kicked users: ${stats.kickedUsers}\n` +
-      `Admins: ${stats.admins}`,
+        `Total users: ${stats.totalUsers}\n` +
+        `Joined users: ${stats.joinedUsers}\n` +
+        `Kicked users: ${stats.kickedUsers}\n` +
+        `Admins: ${stats.admins}`,
     );
   });
 
   // Force kick
   bot.command("forcekick", async (ctx) => {
-    if (ctx.chat.type !== "private") return;  // Skip if not a private chat
-    
+    if (ctx.chat.type !== "private") return; // Skip if not a private chat
+
     const lang = ctx.from?.language_code || "en";
 
     if (!isAdmin(ctx)) {
@@ -291,8 +293,8 @@ export function createBot(token: string) {
 
   // Handle group join events
   bot.on("new_chat_members", async (ctx) => {
-    if (ctx.chat.type !== "private") return;  // Skip if not a private chat
-    
+    if (ctx.chat.type !== "private") return; // Skip if not a private chat
+
     // Skip if not in the target group
     if (ctx.chat.id.toString() !== process.env.GROUP_ID) return;
 
@@ -335,8 +337,8 @@ export function createBot(token: string) {
 
   // Handle members leaving
   bot.on("left_chat_member", async (ctx) => {
-    if (ctx.chat.type !== "private") return;  // Skip if not a private chat
-    
+    if (ctx.chat.type !== "private") return; // Skip if not a private chat
+
     // Skip if not in the target group
     if (ctx.chat.id.toString() !== process.env.GROUP_ID) return;
 
