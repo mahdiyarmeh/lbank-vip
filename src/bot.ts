@@ -135,6 +135,12 @@ export function createBot(token: string) {
         return;
       }
 
+      //check for no uid
+      if (!uidUser) {
+        await ctx.reply(i18n(lang, "uidDoesntExist"));
+        return;
+      }
+
       // Save the user with UID
       await db.saveUser({
         telegram_id: ctx.from!.id,

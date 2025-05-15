@@ -20,6 +20,7 @@ export const messages = {
     error: "An error occurred. Please try again later.",
     cannotChangeUid: "⚠️ You cannot change your UID once it's set.",
     uidAlreadyUsed: "⚠️ This UID is already used by another Telegram account.",
+    uidDoesntExist: "⚠️ UID doesnt exist.",
   },
   fa: {
     greeting: "👋 به ربات دسترسی به گروه خصوصی ما خوش آمدید!",
@@ -43,5 +44,6 @@ export const messages = {
     error: "خطایی رخ داده است. لطفا بعدا دوباره تلاش کنید.",
     cannotChangeUid: "⚠️ شما نمی‌توانید پس از تنظیم، UID خود را تغییر دهید.",
     uidAlreadyUsed: "⚠️ این UID قبلاً توسط یک حساب دیگر استفاده شده است.",
+    uidDoesntExist: "⚠️ این UID موجود نیست.",
   },
 };
