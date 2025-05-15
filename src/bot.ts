@@ -29,10 +29,10 @@ export function createBot(token: string) {
 
   bot.telegram.setMyCommands([
     { command: "start", description: "Start the bot" },
-    { command: "setthreshold", description: "Set the balance threshold" },
-    { command: "threshold", description: "Show current threshold" },
-    { command: "addadmin", description: "Add a new admin" },
-    { command: "forcekick", description: "Kick users below threshold" },
+    // { command: "setthreshold", description: "Set the balance threshold" },
+    // { command: "threshold", description: "Show current threshold" },
+    // { command: "addadmin", description: "Add a new admin" },
+    // { command: "forcekick", description: "Kick users below threshold" },
   ]);
 
   // Middleware to attach user to context
@@ -73,7 +73,7 @@ export function createBot(token: string) {
   const createInviteLink = async (groupId: string): Promise<string> => {
     const link = await bot.telegram.createChatInviteLink(groupId, {
       creates_join_request: false,
-      expire_date: Math.floor(Date.now() / 1000) + 300, // 5 minutes
+      expire_date: Math.floor(Date.now() / 1000) + 60, // 1 minutes
       member_limit: 1, // One-time use
     });
 
@@ -104,7 +104,7 @@ export function createBot(token: string) {
   });
 
   // Handle text messages (UID input)
-  bot.on("text", async (ctx) => {
+  bot.hears(/^[^\/].+$/, async (ctx) => {
     // Skip commands
     if (ctx.message.text.startsWith("/")) return;
     if (userState.get(ctx.from!.id) !== "AWAITING_UID") return;
