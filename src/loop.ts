@@ -1,6 +1,6 @@
 import * as db from "./database";
 import { Telegraf } from "telegraf";
-import { kickUserFromGroup } from "./bot";
+import { kickUserFromGroup } from "./bot/helpers/kickUserFromGroup";
 import { getTeamList, TGetTeamListRes } from "./services/getTeamList";
 
 // Sync balances from API
