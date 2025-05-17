@@ -15,7 +15,7 @@ async function main() {
       // Setup balance sync
       setupBalanceSync(bot);
 
-      // Start bot
+      // Start bot with retry logic
       const MAX_RETRIES = 10;
 
       for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
@@ -24,21 +24,50 @@ async function main() {
           console.log("Bot started successfully");
           break; // success
         } catch (e) {
-          console.log(`Launch failed (attempt ${attempt})`);
+          console.log(`Launch failed (attempt ${attempt}):`, e);
           if (attempt === MAX_RETRIES) throw e;
-          await new Promise((res) => setTimeout(res, 1000)); // wait before retrying
+          await new Promise((res) => setTimeout(res, 1000));
         }
       }
 
-      // Handle graceful shutdown
-      process.once("SIGINT", () => bot.stop("SIGINT"));
-      process.once("SIGTERM", () => bot.stop("SIGTERM"));
+      // Graceful shutdown handlers
+      process.once("SIGINT", async () => {
+        console.log("Received SIGINT, stopping bot...");
+        try {
+          bot.stop("SIGINT");
+        } catch {}
+        process.exit(0);
+      });
 
-      break; // Break out of loop if everything runs successfully
+      process.once("SIGTERM", async () => {
+        console.log("Received SIGTERM, stopping bot...");
+        try {
+          bot.stop("SIGTERM");
+        } catch {}
+        process.exit(0);
+      });
+
+      process.once("uncaughtException", async (err) => {
+        console.error("Uncaught Exception:", err);
+        try {
+          bot.stop("uncaughtException");
+        } catch {}
+        process.exit(1);
+      });
+
+      process.once("unhandledRejection", async (reason) => {
+        console.error("Unhandled Rejection:", reason);
+        try {
+          bot.stop("unhandledRejection");
+        } catch {}
+        process.exit(1);
+      });
+
+      break; // exit while(true) after successful start
     } catch (error) {
       console.error("Error starting application:", error);
-      console.log("Restarting application...");
-      await new Promise((res) => setTimeout(res, 3000)); // Optionally wait before restart
+      console.log("Restarting application in 3 seconds...");
+      await new Promise((res) => setTimeout(res, 3000));
     }
   }
 }

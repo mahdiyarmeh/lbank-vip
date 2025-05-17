@@ -2,6 +2,7 @@ import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import path from "path";
 import { TUser } from "./utils/user.type";
+import { consts } from "./utils/consts";
 
 // Database connection
 let db: any;
@@ -10,7 +11,7 @@ let db: any;
 export async function initDb() {
   // Create database connection
   db = await open({
-    filename: path.join(__dirname, "../database.sqlite"),
+    filename: path.join(__dirname, `../${consts.projectName}_database.sqlite`),
     driver: sqlite3.Database,
   });
 

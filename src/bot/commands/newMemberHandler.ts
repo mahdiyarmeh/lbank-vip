@@ -16,7 +16,7 @@ export async function newMemberHandler(
       // Find user in database
       const user = await db.getUserByTelegramId(member.id);
 
-      if (!user) {
+      if (!user || !user.uid) {
         // Unregistered user - kick
         await kickUserFromGroup(bot, member.id);
         continue;

@@ -11,6 +11,7 @@ function getEnvVar(key: string): string {
 }
 
 export const consts = {
+  projectName: getEnvVar("NAME"),
   botToken: getEnvVar("BOT_TOKEN"),
   groupId: getEnvVar("GROUP_ID"),
   apiKey: getEnvVar("API_KEY"),
