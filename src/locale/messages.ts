@@ -21,6 +21,15 @@ export const messages = {
     cannotChangeUid: "⚠️ You cannot change your UID once it's set.",
     uidAlreadyUsed: "⚠️ This UID is already used by another Telegram account.",
     uidDoesntExist: "⚠️ UID doesnt exist.",
+    help: `
+🆘 Bot Commands:
+
+/start - Start the bot
+/setthreshold - Set the balance threshold (/setthreshold <threshold>)
+/threshold - Show current threshold
+/addadmin - Add a new admin (/addadmin <admin telegram id>)
+/forcekick - Kick users below threshold
+`,
   },
   fa: {
     greeting: "👋 به ربات دسترسی به گروه خصوصی ما خوش آمدید!",
@@ -45,5 +54,14 @@ export const messages = {
     cannotChangeUid: "⚠️ شما نمی‌توانید پس از تنظیم، UID خود را تغییر دهید.",
     uidAlreadyUsed: "⚠️ این UID قبلاً توسط یک حساب دیگر استفاده شده است.",
     uidDoesntExist: "⚠️ این UID موجود نیست.",
+    help: `
+🆘 دستورات ربات:
+
+/start - شروع ربات
+/setthreshold - تنظیم حداقل موجودی (/setthreshold <threshold>)
+/threshold - نمایش حداقل موجودی فعلی
+/addadmin - افزودن مدیر جدید (/addadmin <admin telegram id>)
+/forcekick - حذف کاربران با موجودی کم
+`,
   },
 };

@@ -1,5 +1,4 @@
 import { Telegraf, Context } from "telegraf";
-import * as db from "../database";
 import { startHandler } from "./commands/startHandler";
 import { uidHandler } from "./commands/uidHandler";
 import { setthreshholdHandler } from "./commands/setthreshholdHandler";
@@ -10,6 +9,7 @@ import { forceKickHandler } from "./commands/forceKickHandler";
 import { newMemberHandler } from "./commands/newMemberHandler";
 import { leftMemberHandler } from "./commands/leftMemberHandler";
 import { middleware } from "./middleware";
+import { helpHandler } from "./commands/helpHandler";
 
 export type UserState = "AWAITING_UID";
 
@@ -51,6 +51,8 @@ export function createBot(token: string) {
   bot.command("addadmin", async (ctx) => addAdminHandler(ctx));
 
   bot.command("stats", async (ctx) => statsHandler(ctx));
+
+  bot.command("help", async (ctx) => helpHandler(ctx));
 
   // Force kick
   bot.command("forcekick", async (ctx) => forceKickHandler(ctx, bot));

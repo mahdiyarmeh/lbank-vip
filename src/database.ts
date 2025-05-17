@@ -99,20 +99,20 @@ export async function makeAdmin(telegramId: number) {
   );
 }
 
-export async function getStats() {
-  const [totalUsers, joinedUsers, kickedUsers, admins] = await Promise.all([
-    db.get("SELECT COUNT(*) as count FROM users"),
-    db.get("SELECT COUNT(*) as count FROM users WHERE joined = 1"),
-    db.get("SELECT COUNT(*) as count FROM users WHERE kicked_at IS NOT NULL"),
-    db.get("SELECT COUNT(*) as count FROM users WHERE is_admin = 1"),
-  ]);
+export async function getUsersCsv() {
+  const users = await db.all("SELECT * FROM users");
 
-  return {
-    totalUsers: totalUsers.count,
-    joinedUsers: joinedUsers.count,
-    kickedUsers: kickedUsers.count,
-    admins: admins.count,
-  };
+  // Get CSV header from keys of the first user (if exists)
+  if (users.length === 0) return "";
+
+  const headers = Object.keys(users[0]).join(",");
+  const rows = users.map((user: any) =>
+    Object.values(user)
+      .map((value) => `"${String(value).replace(/"/g, '""')}"`) // escape quotes
+      .join(","),
+  );
+
+  return [headers, ...rows].join("\n");
 }
 
 // Settings functions
@@ -233,4 +233,12 @@ export async function saveUser(
       user.is_admin || 0,
     );
   }
+}
+
+export async function getIsAdmin(telegramId: number): Promise<boolean> {
+  const user = await db.get(
+    "SELECT is_admin FROM users WHERE telegram_id = ?",
+    telegramId,
+  );
+  return user?.is_admin === 1;
 }

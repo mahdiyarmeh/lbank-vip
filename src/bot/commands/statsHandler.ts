@@ -2,10 +2,11 @@ import { BotContext } from "..";
 import * as db from "../../database";
 import { i18n } from "../../locale";
 import { isAdmin } from "../helpers/isAdmin";
+import { Readable } from "stream";
 
 export async function statsHandler(ctx: BotContext) {
   if (!ctx.chat) return;
-  if (ctx.chat.type !== "private") return; // Skip if not a private chat
+  if (ctx.chat.type !== "private") return; // Only private chats
 
   const lang = ctx.from?.language_code || "en";
 
@@ -14,13 +15,13 @@ export async function statsHandler(ctx: BotContext) {
     return;
   }
 
-  const stats = await db.getStats();
+  const csvData = await db.getUsersCsv();
 
-  await ctx.reply(
-    `📊 Bot Statistics:\n\n` +
-      `Total users: ${stats.totalUsers}\n` +
-      `Joined users: ${stats.joinedUsers}\n` +
-      `Kicked users: ${stats.kickedUsers}\n` +
-      `Admins: ${stats.admins}`,
-  );
+  // Convert string to readable stream
+  const stream = Readable.from([csvData]);
+
+  await ctx.replyWithDocument({
+    source: stream,
+    filename: "users_stats.csv",
+  });
 }
