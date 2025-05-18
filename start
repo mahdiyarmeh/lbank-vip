@@ -1,5 +1,7 @@
 #!/bin/bash
 
+npm run build
+
 # Prevent running inside an existing tmux session
 if [ -n "$TMUX" ]; then
   echo "You're already inside a tmux session. Exit it before running this script."
