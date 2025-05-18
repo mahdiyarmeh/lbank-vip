@@ -3,6 +3,13 @@
 ## Overview
 This bot manages users based on their balance and allows admins to configure thresholds, manage users, and kick users below the threshold.
 
+## How to setup
+1. ```git clone https://github.com/mahdiyarmeh/lbank-vip.git
+2. ```cd lbank-vip
+3. ```./start
+
+- make sure you have tmux and npm installed
+
 ## How to Use
 
 ### 1. Start the Bot
@@ -13,6 +20,7 @@ This bot manages users based on their balance and allows admins to configure thr
 ### 2. Set the Threshold (Admin Only)
 - **Command**: `/setthreshold <amount>`
 - Admins can set the balance threshold for joining the group.
+- ex. /setthreshold 100.
 
 ### 3. View Current Threshold (Admin Only)
 - **Command**: `/threshold`
@@ -21,6 +29,7 @@ This bot manages users based on their balance and allows admins to configure thr
 ### 4. Add New Admin (Admin Only)
 - **Command**: `/addadmin <telegram_id>`
 - Adds a new admin by their Telegram ID.
+- ex. /addadmin 123456.
 
 ### 5. Force Kick Users Below Threshold (Admin Only)
 - **Command**: `/forcekick`
@@ -30,7 +39,11 @@ This bot manages users based on their balance and allows admins to configure thr
 - **Command**: `/stats`
 - Displays bot statistics like total users, kicked users, etc.
 
-### 7. Group Join Event
+### 7. Help (Admin Only)
+- **Command**: `/help`
+- shows list of commands
+
+### 8. Group Join Event
 - New members who join the group are checked against the balance threshold.
 - If their balance is below the threshold, they are kicked.
 
