@@ -21,10 +21,14 @@ async function main() {
       for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
         try {
           await bot.launch();
-          console.log("Bot started successfully");
+          console.log(new Date().toString(), "Bot started successfully");
           break; // success
         } catch (e) {
-          console.log(`Launch failed (attempt ${attempt}):`, e);
+          console.log(
+            new Date().toString(),
+            `Launch failed (attempt ${attempt}):`,
+            e,
+          );
           if (attempt === MAX_RETRIES) throw e;
           await new Promise((res) => setTimeout(res, 1000));
         }
@@ -32,7 +36,7 @@ async function main() {
 
       // Graceful shutdown handlers
       process.once("SIGINT", async () => {
-        console.log("Received SIGINT, stopping bot...");
+        console.log(new Date().toString(), "Received SIGINT, stopping bot...");
         try {
           bot.stop("SIGINT");
         } catch {}
@@ -40,7 +44,7 @@ async function main() {
       });
 
       process.once("SIGTERM", async () => {
-        console.log("Received SIGTERM, stopping bot...");
+        console.log(new Date().toString(), "Received SIGTERM, stopping bot...");
         try {
           bot.stop("SIGTERM");
         } catch {}
@@ -48,7 +52,7 @@ async function main() {
       });
 
       process.once("uncaughtException", async (err) => {
-        console.error("Uncaught Exception:", err);
+        console.error(new Date().toString(), "Uncaught Exception:", err);
         try {
           bot.stop("uncaughtException");
         } catch {}
@@ -56,7 +60,7 @@ async function main() {
       });
 
       process.once("unhandledRejection", async (reason) => {
-        console.error("Unhandled Rejection:", reason);
+        console.error(new Date().toString(), "Unhandled Rejection:", reason);
         try {
           bot.stop("unhandledRejection");
         } catch {}
@@ -65,8 +69,8 @@ async function main() {
 
       break; // exit while(true) after successful start
     } catch (error) {
-      console.error("Error starting application:", error);
-      console.log("Restarting application in 3 seconds...");
+      console.error(new Date().toString(), "Error starting application:", error);
+      console.log(new Date().toString(), "Restarting application in 3 seconds...");
       await new Promise((res) => setTimeout(res, 3000));
     }
   }

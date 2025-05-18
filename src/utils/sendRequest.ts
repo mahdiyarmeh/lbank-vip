@@ -148,7 +148,7 @@ export async function sendRequest(
     const response = await axios(axiosConfig);
     return response.data;
   } catch (error: any) {
-    console.error(`Error in sendRequest: ${error.message}`);
+    console.error(new Date().toString(), `Error in sendRequest: ${error.message}`);
     throw error;
   }
 }

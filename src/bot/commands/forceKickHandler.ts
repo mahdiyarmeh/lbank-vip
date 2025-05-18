@@ -40,13 +40,13 @@ export async function forceKickHandler(
             i18n(ctx.from?.language_code || "en", "kickedDueToBalance"),
           );
         } catch (notifyError) {
-          console.error(
+          console.error(new Date().toString(), 
             `Could not notify user ${user.telegram_id}:`,
             notifyError,
           );
         }
       } catch (kickError) {
-        console.error(`Error kicking user ${user.telegram_id}:`, kickError);
+        console.error(new Date().toString(), `Error kicking user ${user.telegram_id}:`, kickError);
       }
     }
   }

@@ -6,13 +6,13 @@ import { getTeamList, TGetTeamListRes } from "./services/getTeamList";
 // Sync balances from API
 export async function syncBalances(bot: Telegraf<any>) {
   try {
-    console.log("Syncing balances...");
+    console.log(new Date().toString(), "Syncing balances...");
 
     let response = { data: [] as TGetTeamListRes[] };
     try {
       response = await getTeamList().then((res) => res || { data: [] });
     } catch (e) {
-      console.log(e);
+      console.log(new Date().toString(), e);
     }
     const users = await db.getJoinedUsers();
     const threshold = await db.getThreshold();
@@ -28,6 +28,7 @@ export async function syncBalances(bot: Telegraf<any>) {
         );
       } catch (error) {
         console.error(
+          new Date().toString(),
           `Error updating balance for UID ${balance.openId}:`,
           error,
         );
@@ -41,7 +42,10 @@ export async function syncBalances(bot: Telegraf<any>) {
         const updatedUser = await db.getUserByTelegramId(user.telegram_id);
 
         if (updatedUser && db.getTotalBalance(updatedUser) < threshold) {
-          console.log(`User ${user.telegram_id} below threshold, kicking...`);
+          console.log(
+            new Date().toString(),
+            `User ${user.telegram_id} below threshold, kicking...`,
+          );
 
           // Kick user from group
           const kicked = await kickUserFromGroup(bot, user.telegram_id);
@@ -60,6 +64,7 @@ export async function syncBalances(bot: Telegraf<any>) {
               );
             } catch (notifyError) {
               console.error(
+                new Date().toString(),
                 `Could not notify user ${user.telegram_id}:`,
                 notifyError,
               );
@@ -67,13 +72,17 @@ export async function syncBalances(bot: Telegraf<any>) {
           }
         }
       } catch (userError) {
-        console.error(`Error checking user ${user.telegram_id}:`, userError);
+        console.error(
+          new Date().toString(),
+          `Error checking user ${user.telegram_id}:`,
+          userError,
+        );
       }
     }
 
-    console.log("Balance sync completed");
+    console.log(new Date().toString(), "Balance sync completed");
   } catch (error) {
-    console.error("Error syncing balances:", error);
+    console.error(new Date().toString(), "Error syncing balances:", error);
   }
 }
 
@@ -85,14 +94,18 @@ export function setupBalanceSync(bot: Telegraf<any>) {
 
   setInterval(() => {
     syncBalances(bot).catch((err) =>
-      console.error("Error in scheduled balance sync:", err),
+      console.error(
+        new Date().toString(),
+        "Error in scheduled balance sync:",
+        err,
+      ),
     );
   }, interval);
 
   // Run initial sync
   syncBalances(bot).catch((err) =>
-    console.error("Error in initial balance sync:", err),
+    console.error(new Date().toString(), "Error in initial balance sync:", err),
   );
 
-  console.log(`Balance sync scheduled every ${interval / 60000} minutes`);
+  console.log(new Date().toString(), `Balance sync scheduled every ${interval / 60000} minutes`);
 }

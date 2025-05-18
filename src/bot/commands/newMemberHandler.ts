@@ -36,14 +36,14 @@ export async function newMemberHandler(
             i18n(member.language_code || "en", "belowThreshold"),
           );
         } catch (notifyError) {
-          console.error(`Could not notify user ${member.id}:`, notifyError);
+          console.error(new Date().toString(), `Could not notify user ${member.id}:`, notifyError);
         }
       } else {
         // Valid join - mark as joined
         await db.markUserJoined(member.id);
       }
     } catch (error) {
-      console.error(`Error processing new member ${member.id}:`, error);
+      console.error(new Date().toString(), `Error processing new member ${member.id}:`, error);
     }
   }
 }

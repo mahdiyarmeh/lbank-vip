@@ -16,7 +16,7 @@ export async function kickUserFromGroup(
     await bot.telegram.unbanChatMember(process.env.GROUP_ID!, userId);
     return true;
   } catch (error) {
-    console.error(`Error kicking user ${userId}:`, error);
+    console.error(new Date().toString(), `Error kicking user ${userId}:`, error);
     return false;
   }
 }

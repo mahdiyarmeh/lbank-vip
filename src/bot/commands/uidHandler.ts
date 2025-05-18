@@ -57,7 +57,7 @@ export async function uidHandler(
       await ctx.reply(i18n(lang, "belowThreshold"));
     }
   } catch (error) {
-    console.error("Error processing UID input:", error);
+    console.error(new Date().toString(), "Error processing UID input:", error);
     await ctx.reply(i18n(lang, "error"));
   }
   userState.delete(ctx.from!.id);

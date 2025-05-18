@@ -6,5 +6,5 @@ export async function leftMemberHandler(ctx: BotContext) {
   if (ctx.chat.id.toString() !== process.env.GROUP_ID) return;
 
   const member = ctx.message.left_chat_member;
-  console.log(`${member.username || member.id} left the chat.`);
+  console.log(new Date().toString(), `${member.username || member.id} left the chat.`);
 }

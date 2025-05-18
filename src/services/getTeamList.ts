@@ -41,7 +41,7 @@ export async function getTeamList(): Promise<
   try {
     res = await sendRequest(endpoint, method, params);
   } catch (e) {
-    console.log(e);
+    console.log(new Date().toString(), e);
   }
 
   return res;

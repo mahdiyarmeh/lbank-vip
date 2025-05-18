@@ -54,7 +54,7 @@ export async function initDb() {
     );
   }
 
-  console.log("Database initialized");
+  console.log(new Date().toString(), "Database initialized");
   return db;
 }
 
