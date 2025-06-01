@@ -1,62 +1,64 @@
-# Telegram Bot Documentation
-
-## Overview
+Telegram Bot Documentation
+Overview
 This bot manages users based on their balance and allows admins to configure thresholds, manage users, and kick users below the threshold.
 
-## How to setup
-1. ```git clone https://github.com/mahdiyarmeh/lbank-vip.git
-2. ```cd lbank-vip
-3. ```./start
+How to Setup
 
-- make sure you have tmux and npm installed
+`git clone https://github.com/mahdiyarmeh/lbank-vip.git`
+or unzip the source code
 
-## How to Use
+`cd lbank-vip`
 
-### 1. Start the Bot
-- **Command**: `/start`
-- Initializes interaction with the bot.
-- If the user is not registered, the bot will ask for their UID.
+`./start`
 
-### 2. Set the Threshold (Admin Only)
-- **Command**: `/setthreshold <amount>`
-- Admins can set the balance threshold for joining the group.
-- ex. /setthreshold 100.
+Make sure you have tmux and npm installed.
 
-### 3. View Current Threshold (Admin Only)
-- **Command**: `/threshold`
-- Shows the current threshold.
+How to Use
 
-### 4. Add New Admin (Admin Only)
-- **Command**: `/addadmin <telegram_id>`
-- Adds a new admin by their Telegram ID.
-- ex. /addadmin 123456.
+1. Start the Bot
+   Command: /start
 
-### 5. Force Kick Users Below Threshold (Admin Only)
-- **Command**: `/forcekick`
-- Kicks users from the group who are below the balance threshold.
+Initializes interaction with the bot.
 
-### 6. Bot Statistics (Admin Only)
-- **Command**: `/stats`
-- Displays bot statistics like total users, kicked users, etc.
+If the user is not registered, the bot will ask for their UID.
 
-### 7. Help (Admin Only)
-- **Command**: `/help`
-- shows list of commands
+2. Set the Threshold (Admin Only)
+   Command: /setthreshold <amount>
 
-### 8. Group Join Event
-- New members who join the group are checked against the balance threshold.
-- If their balance is below the threshold, they are kicked.
+Admins set the balance threshold for joining the group.
 
-## Environment Variables
+Example: /setthreshold 100
 
-- `ADMIN_IDS`: List of Telegram IDs of admins (JSON format). Example:
-  ```json
-  [123456789, 987654321]
-- `GROUP_ID`: Telegram group ID where the bot operates.
-- `DATABASE_URL`: URL to connect to the database for storing user data, thresholds, and stats.
+3. View Current Threshold (Admin Only)
+   Command: /threshold
 
-## Notes
+Shows the current threshold.
 
-- The bot uses `Telegraf` and interacts with a database to track user status, balances, and thresholds.
-- Users must provide a UID upon starting if not previously registered.
-- Admin actions require specific permissions via the `/addadmin` and `/setthreshold` commands.
+4. Add New Admin (Admin Only)
+   Command: /addadmin <telegram_id>
+
+Adds a new admin by their Telegram ID.
+
+Example: /addadmin 123456
+
+5. Force Kick Users Below Threshold (Admin Only)
+   Command: /forcekick
+
+Kicks users from the group who are below the balance threshold.
+
+6. Bot Statistics (Admin Only)
+   Command: /stats
+
+Displays bot statistics like total users, kicked users, etc.
+
+Returns a CSV export of the user database.
+
+7. Help (Admin Only)
+   Command: /help
+
+Shows list of commands.
+
+8. Group Join Event
+   New members who join the group are checked against the balance threshold.
+
+If their balance is below the threshold, they are kicked.
