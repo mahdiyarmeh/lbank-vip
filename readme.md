@@ -1,17 +1,22 @@
-Telegram Bot Documentation
-Overview
+# Telegram Bot Documentation  
 This bot manages users based on their balance and allows admins to configure thresholds, manage users, and kick users below the threshold.
 
 # How to Setup
 
-`git clone https://github.com/mahdiyarmeh/lbank-vip.git`
+```bash
+git clone https://github.com/mahdiyarmeh/lbank-vip.git
+```
 or unzip the source code
 
-`cd lbank-vip`
+```
+cd lbank-vip
+```
 
-`./start`
+```
+./start
+```
 
-Make sure you have tmux and npm installed.
+- Make sure you have **tmux** and **npm** installed.
 
 # How to Use
 
