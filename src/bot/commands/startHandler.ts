@@ -1,18 +1,22 @@
+import { consts } from "../../utils/consts";
 import { BotContext, UserState } from "..";
 import * as db from "../../database";
 import { i18n } from "../../locale";
 import { createInviteLink } from "../helpers/createInviteLink";
+import { isAdmin } from "../helpers/isAdmin";
 
 export async function startHandler(
   ctx: BotContext,
   bot: any,
   userState: Map<number, UserState>,
 ) {
-  if (ctx.chat?.type !== "private") return;
+  if (!ctx.chat || !ctx.message || !("text" in ctx.message)) return;
+  if (ctx.chat.type !== "private") return; // Skip if not a private chat
 
-  const lang = ctx.from?.language_code || "en";
+  const lang = consts.lang;
 
-  await ctx.reply(i18n(lang, "greeting"));
+  const welcomeMessage = await db.getWelcomeMessage();
+  await ctx.reply(welcomeMessage || i18n(lang, "greeting"));
   const user = await db.getUserByTelegramId(ctx.from!.id);
   if (!user?.uid) {
     await ctx.reply(i18n(lang, "askUid"));

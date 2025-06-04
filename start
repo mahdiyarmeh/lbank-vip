@@ -1,18 +1,21 @@
 #!/bin/bash
 
-npm run build
-
-# Prevent running inside an existing tmux session
-if [ -n "$TMUX" ]; then
-  echo "You're already inside a tmux session. Exit it before running this script."
+# Build the project
+if ! npm run build; then
+  echo "Build failed, exiting..."
   exit 1
 fi
+echo "build done"
 
 # Get NAME from first arg or prompt
 if [ -n "$1" ]; then
   NAME="$1"
 else
   read -p "NAME: " NAME
+  if [ -z "$NAME" ]; then
+    echo "NAME is required"
+    exit 1
+  fi
 fi
 
 ENV_FILE=".env.$NAME"
@@ -26,13 +29,62 @@ mkdir -p "$LOG_DIR"
 if [ -f "$ENV_FILE" ]; then
   echo "$ENV_FILE already exists, skipping creation."
 else
-  read -p "BOT_TOKEN: " BOT_TOKEN
-  read -p "GROUP_ID: " GROUP_ID
-  read -p "API_KEY: " API_KEY
-  read -p "API_SECRET: " API_SECRET
-  read -p "DEFAULT_THRESHOLD: " DEFAULT_THRESHOLD
-  read -p "SYNC_INTERVAL_MINUTES: " SYNC_INTERVAL_MINUTES
-  read -p "ADMIN_IDS (e.g., [1,2,3]): " ADMIN_IDS
+  # Prompt for required inputs with validation
+  while [ -z "$BOT_TOKEN" ]; do
+    read -p "BOT_TOKEN: " BOT_TOKEN
+    if [ -z "$BOT_TOKEN" ]; then
+      echo "BOT_TOKEN is required"
+    fi
+  done
+  
+  while [ -z "$GROUP_ID" ]; do
+    read -p "GROUP_ID: " GROUP_ID
+    if [ -z "$GROUP_ID" ]; then
+      echo "GROUP_ID is required"
+    fi
+  done
+  
+  while [ -z "$API_KEY" ]; do
+    read -p "API_KEY: " API_KEY
+    if [ -z "$API_KEY" ]; then
+      echo "API_KEY is required"
+    fi
+  done
+  
+  while [ -z "$API_SECRET" ]; do
+    read -p "API_SECRET: " API_SECRET
+    if [ -z "$API_SECRET" ]; then
+      echo "API_SECRET is required"
+    fi
+  done
+  
+  while [ -z "$DEFAULT_THRESHOLD" ]; do
+    read -p "DEFAULT_THRESHOLD: " DEFAULT_THRESHOLD
+    if [ -z "$DEFAULT_THRESHOLD" ]; then
+      echo "DEFAULT_THRESHOLD is required"
+    fi
+  done
+  
+  while [ -z "$SYNC_INTERVAL_MINUTES" ]; do
+    read -p "SYNC_INTERVAL_MINUTES: " SYNC_INTERVAL_MINUTES
+    if [ -z "$SYNC_INTERVAL_MINUTES" ]; then
+      echo "SYNC_INTERVAL_MINUTES is required"
+    fi
+  done
+  
+  while [ -z "$ADMIN_IDS" ]; do
+    read -p "ADMIN_IDS (e.g., [1,2,3]): " ADMIN_IDS
+    if [ -z "$ADMIN_IDS" ]; then
+      echo "ADMIN_IDS is required"
+    fi
+  done
+  
+  while [ -z "$BOT_LANG" ]; do
+    read -p "language (en, fa): " BOT_LANG
+    if [ -z "$BOT_LANG" ]; then
+      echo "language is required"
+    fi
+  done
 
   cat > "$ENV_FILE" <<EOF
 NAME=$NAME
@@ -43,13 +95,31 @@ API_SECRET=$API_SECRET
 DEFAULT_THRESHOLD=$DEFAULT_THRESHOLD
 SYNC_INTERVAL_MINUTES=$SYNC_INTERVAL_MINUTES
 ADMIN_IDS=$ADMIN_IDS
+BOT_LANG=$BOT_LANG
 EOF
-
   echo "Created $ENV_FILE"
+  chmod 600 "$ENV_FILE"  # Secure the env file
+fi
+
+# Check if tmux is available
+if ! command -v tmux &> /dev/null; then
+  echo "tmux is not installed"
+  exit 1
+fi
+
+# Kill existing session if it exists
+if tmux has-session -t "$NAME" 2>/dev/null; then
+  echo "Killing existing session '$NAME'..."
+  tmux kill-session -t "$NAME"
 fi
 
 # Start new detached tmux session with output logged
-tmux new-session -d -s "$NAME" "export \$(xargs < $ENV_FILE); npm run start > $LOG_FILE 2>&1"
+echo "Starting tmux session '$NAME'..."
+tmux new-session -d -s "$NAME" "export \$(xargs < $ENV_FILE); npm run start > $LOG_FILE 2>&1; echo 'Process exited. Check logs and retry with same name if needed.' >> $LOG_FILE"
 
 echo "Tmux session '$NAME' started and detached."
 echo "Logs are being written to $LOG_FILE"
+echo ""
+echo "To monitor: tmux attach -t $NAME"
+echo "To view logs: tail -f $LOG_FILE"
+echo "If the process exits with problems, retry with: $0 $NAME"

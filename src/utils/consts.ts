@@ -2,12 +2,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-function getEnvVar(key: string): string {
+function getEnvVar<T extends string>(key: string): T {
   const value = process.env[key];
   if (!value) {
     throw new Error(`Environment variable "${key}" is not defined.`);
   }
-  return value;
+  return value as T;
 }
 
 export const consts = {
@@ -16,6 +16,7 @@ export const consts = {
   groupId: getEnvVar("GROUP_ID"),
   apiKey: getEnvVar("API_KEY"),
   apiSecret: getEnvVar("API_SECRET"),
+  lang: getEnvVar<"en"|"fa">("BOT_LANG"),
 
   baseUrl: "https://affiliate.lbankverify.com",
   endpoints: {

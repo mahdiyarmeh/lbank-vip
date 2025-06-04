@@ -1,3 +1,4 @@
+import { consts } from "../../utils/consts";
 import { Telegraf } from "telegraf";
 import { BotContext  } from "..";
 import * as db from "../../database";
@@ -12,7 +13,7 @@ export async function forceKickHandler(
   if (!ctx.chat) return;
   if (ctx.chat.type !== "private") return; // Skip if not a private chat
 
-  const lang = ctx.from?.language_code || "en";
+  const lang = consts.lang;
 
   if (!isAdmin(ctx)) {
     await ctx.reply(i18n(lang, "adminOnly"));
@@ -37,7 +38,7 @@ export async function forceKickHandler(
         try {
           await bot.telegram.sendMessage(
             user.telegram_id,
-            i18n(ctx.from?.language_code || "en", "kickedDueToBalance"),
+            i18n(lang, "kickedDueToBalance"),
           );
         } catch (notifyError) {
           console.error(new Date().toString(), 

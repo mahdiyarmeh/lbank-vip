@@ -53,6 +53,17 @@ export async function initDb() {
       process.env.DEFAULT_THRESHOLD || "100",
     );
   }
+  const welcomeMessage = await db.get(
+    "SELECT value FROM settings WHERE key = ?",
+    "welcome_message",
+  );
+  if (!threshold) {
+    await db.run(
+      "INSERT INTO settings (key, value) VALUES (?, ?)",
+      "welcome_message",
+      "👋 Welcome! \nyou can change this message with /editWelcome",
+    );
+  }
 
   console.log(new Date().toString(), "Database initialized");
   return db;
@@ -117,6 +128,21 @@ export async function getUsersCsv() {
 }
 
 // Settings functions
+export async function getWelcomeMessage() {
+  const result = await db.get(
+    "SELECT value FROM settings WHERE key = ?",
+    "welcome_message",
+  );
+  return result.value as string;
+}
+
+export async function setWelcomeMessage(value: string) {
+  return db.run(
+    "UPDATE settings SET value = ? WHERE key = ?",
+    value,
+    "welcome_message",
+  );
+}
 export async function getThreshold() {
   const result = await db.get(
     "SELECT value FROM settings WHERE key = ?",

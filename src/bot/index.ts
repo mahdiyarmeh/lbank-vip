@@ -1,6 +1,5 @@
 import { Telegraf, Context } from "telegraf";
 import { startHandler } from "./commands/startHandler";
-import { uidHandler } from "./commands/uidHandler";
 import { setthreshholdHandler } from "./commands/setthreshholdHandler";
 import { threshholdHandler } from "./commands/threshholdHandler";
 import { addAdminHandler } from "./commands/addAdminHandler";
@@ -10,8 +9,11 @@ import { newMemberHandler } from "./commands/newMemberHandler";
 import { leftMemberHandler } from "./commands/leftMemberHandler";
 import { middleware } from "./middleware";
 import { helpHandler } from "./commands/helpHandler";
+import { editWelcomeHandler } from "./commands/editWelcomeHandler";
+import { uidHandler } from "./commands/uidHandler";
+import { editWelcomeCommandHandler } from "./commands/editWelcomeCommandHandler";
 
-export type UserState = "AWAITING_UID";
+export type UserState = "AWAITING_UID" | "AWAITING_WELCOME";
 
 const userState = new Map<number, UserState>();
 
@@ -20,18 +22,12 @@ export interface BotContext extends Context {
   user?: any;
 }
 
-// Simple translation function
-
 // Create bot instance
 export function createBot(token: string) {
   const bot = new Telegraf<BotContext>(token);
 
   bot.telegram.setMyCommands([
     { command: "start", description: "Start the bot" },
-    // { command: "setthreshold", description: "Set the balance threshold" },
-    // { command: "threshold", description: "Show current threshold" },
-    // { command: "addadmin", description: "Add a new admin" },
-    // { command: "forcekick", description: "Kick users below threshold" },
   ]);
 
   // Middleware to attach user to context
@@ -41,27 +37,31 @@ export function createBot(token: string) {
   bot.start((ctx) => startHandler(ctx, bot, userState));
 
   // Handle text messages (UID input)
-  bot.hears(/^[^\/].+$/, (ctx) => uidHandler(ctx, bot, userState));
+  // bot.hears(/^[^\/]/, (ctx) => );
 
   // Admin commands
   bot.command("setthreshold", async (ctx) => setthreshholdHandler(ctx));
-
   bot.command("threshold", async (ctx) => threshholdHandler(ctx));
-
   bot.command("addadmin", async (ctx) => addAdminHandler(ctx));
-
   bot.command("stats", async (ctx) => statsHandler(ctx));
-
+  bot.command("editWelcome", async (ctx) =>
+    editWelcomeCommandHandler(ctx, userState),
+  );
   bot.command("help", async (ctx) => helpHandler(ctx));
-
-  // Force kick
   bot.command("forcekick", async (ctx) => forceKickHandler(ctx, bot));
 
   // Handle group join events
   bot.on("new_chat_members", async (ctx) => newMemberHandler(ctx, bot));
-
-  // Handle members leaving
   bot.on("left_chat_member", async (ctx) => leftMemberHandler(ctx));
 
+  // DEFAULT HANDLER - Add this at the end
+  // This catches all messages that didn't match previous handlers
+  bot.on("message", async (ctx) => {
+    if (userState.get(ctx.from!.id) == "AWAITING_UID")
+      await uidHandler(ctx, bot, userState);
+
+    if (userState.get(ctx.from!.id) == "AWAITING_WELCOME")
+      await editWelcomeHandler(ctx, userState);
+  });
   return bot;
 }

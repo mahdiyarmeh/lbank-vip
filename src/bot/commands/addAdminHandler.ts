@@ -1,3 +1,4 @@
+import { consts } from "../../utils/consts";
 import { BotContext } from "..";
 import * as db from "../../database";
 import { i18n } from "../../locale";
@@ -7,7 +8,7 @@ export async function addAdminHandler(ctx: BotContext) {
   if (!ctx.chat || !ctx.message || !("text" in ctx.message)) return;
   if (ctx.chat.type !== "private") return; // Skip if not a private chat
 
-  const lang = ctx.from?.language_code || "en";
+  const lang = consts.lang;
 
   if (!isAdmin(ctx)) {
     await ctx.reply(i18n(lang, "adminOnly"));

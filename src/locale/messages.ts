@@ -5,7 +5,8 @@ export const messages_en = {
   belowThreshold: "⚠️ Your balance is below the required threshold to join.",
   inviteSent: "✅ You’re eligible! Here is your invite link:",
   alreadyJoined: "You’ve already joined the group.",
-  uidNotFound: "We couldn’t find that UID in our system. Please double-check and try again.",
+  uidNotFound:
+    "We couldn’t find that UID in our system. Please double-check and try again.",
   uidSaved: "Your UID has been saved successfully.",
   adminOnly: "⚠️ This command is restricted to admins.",
   thresholdSet: "✅ Threshold updated to {0}.",
@@ -19,6 +20,8 @@ export const messages_en = {
   cannotChangeUid: "⚠️ Once set, you cannot change your UID.",
   uidAlreadyUsed: "⚠️ This UID is already linked to another Telegram account.",
   uidDoesntExist: "⚠️ This UID does not exist in our records.",
+  editWelcome: "send welcome message",
+  editSuccess: "✅ Welcome message updated successfully.",
   help: `
 🆘 Available Commands:
 
@@ -27,6 +30,8 @@ export const messages_en = {
 /threshold - Show the current balance threshold
 /addadmin - Add a new admin (/addadmin <Telegram user ID>)
 /forcekick - Remove users below threshold
+/stats - Show statistics
+/editWelcome - edits welcome message
 `,
 };
 
@@ -37,7 +42,8 @@ export const messages_fa: Record<keyof typeof messages_en, string> = {
   belowThreshold: "⚠️ موجودی شما کمتر از حداقل مورد نیاز برای پیوستن است.",
   inviteSent: "✅ شما واجد شرایط هستید! این لینک دعوت شماست:",
   alreadyJoined: "شما قبلاً به گروه پیوسته‌اید.",
-  uidNotFound: "شناسه کاربری وارد شده در سیستم ما یافت نشد. لطفاً دوباره بررسی کنید.",
+  uidNotFound:
+    "شناسه کاربری وارد شده در سیستم ما یافت نشد. لطفاً دوباره بررسی کنید.",
   uidSaved: "شناسه کاربری شما با موفقیت ثبت شد.",
   adminOnly: "⚠️ این دستور فقط برای مدیران قابل استفاده است.",
   thresholdSet: "✅ حداقل موجودی به {0} تغییر یافت.",
@@ -48,8 +54,11 @@ export const messages_fa: Record<keyof typeof messages_en, string> = {
   kickedDueToBalance: "به دلیل کم بودن موجودی، از گروه حذف شده‌اید.",
   error: "خطایی رخ داد. لطفاً بعداً دوباره تلاش کنید.",
   cannotChangeUid: "⚠️ پس از ثبت، نمی‌توانید شناسه کاربری خود را تغییر دهید.",
-  uidAlreadyUsed: "⚠️ این شناسه کاربری قبلاً به حساب تلگرام دیگری اختصاص یافته است.",
+  uidAlreadyUsed:
+    "⚠️ این شناسه کاربری قبلاً به حساب تلگرام دیگری اختصاص یافته است.",
   uidDoesntExist: "⚠️ این شناسه کاربری در سیستم وجود ندارد.",
+  editWelcome: "پیام خوش آمد را ارسال کنید",
+  editSuccess: "پیام خوش آمد با موفقیت ویرایش شد.",
   help: `
 🆘 دستورات قابل استفاده:
 
@@ -58,5 +67,7 @@ export const messages_fa: Record<keyof typeof messages_en, string> = {
 /threshold - نمایش حداقل موجودی فعلی
 /addadmin - افزودن مدیر جدید (/addadmin <شناسه تلگرام>)
 /forcekick - حذف کاربران با موجودی کمتر از حداقل
+/stats - نمایش آمار
+/editWelcome - ویرایش پیام خوش آمد
 `,
 };

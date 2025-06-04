@@ -6,8 +6,7 @@ export function i18n(
   key: keyof typeof messages_en,
   ...args: any[]
 ): string {
-  // const locale = lang === "fa" ? "fa" : "en";
-  const locale = "en";
+  const locale = lang === "fa" ? "fa" : "en";
   let message = locale == "en" ? messages_en[key] : messages_fa[key] || key;
 
   args.forEach((arg, i) => {
