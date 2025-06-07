@@ -13,7 +13,7 @@ echo "build done"
 if [ -n "$1" ]; then
   NAME="$1"
 else
-  read -p "NAME: " NAME
+  read -p "NAME( no white spaces): " NAME
 fi
 
 if [ -z "$NAME" ]; then
