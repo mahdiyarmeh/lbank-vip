@@ -9,10 +9,18 @@ export async function syncBalances(bot: Telegraf<any>) {
     console.log(new Date().toString(), "Syncing balances...");
 
     let response = { data: [] as TGetTeamListRes[] };
+    let i = 0;
     try {
-      response = await getTeamList().then((res) => res || { data: [] });
+      while (true) {
+        const res = await getTeamList(i).then((res) => res || { data: [] });
+        response.data.push(...res.data);
+        i = i + 100;
+        if (res.data.length < 100) break;
+        if (i > 10000) break;
+      }
     } catch (e) {
       console.log(new Date().toString(), e);
+      i = 100000
     }
     const users = await db.getJoinedUsers();
     const threshold = await db.getThreshold();
@@ -107,5 +115,8 @@ export function setupBalanceSync(bot: Telegraf<any>) {
     console.error(new Date().toString(), "Error in initial balance sync:", err),
   );
 
-  console.log(new Date().toString(), `Balance sync scheduled every ${interval / 60000} minutes`);
+  console.log(
+    new Date().toString(),
+    `Balance sync scheduled every ${interval / 60000} minutes`,
+  );
 }

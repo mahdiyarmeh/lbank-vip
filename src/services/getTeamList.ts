@@ -17,12 +17,15 @@ export type TGetTeamListRes = {
   contractTotalFeeAmt: string;
   reserveAmt: string;
 };
-export async function getTeamList(): Promise<
+export async function getTeamList(
+  start: number = 0,
+  pageSize: number = 100,
+): Promise<
   | undefined
   | {
-    result: "true" | "false";
-    data: TGetTeamListRes[];
-  }
+      result: "true" | "false";
+      data: TGetTeamListRes[];
+    }
 > {
   const method = "GET";
   const endpoint = consts.endpoints.teamList;
@@ -34,8 +37,8 @@ export async function getTeamList(): Promise<
   const params = {
     startTime: currentTime - 12 * 30 * 24 * 60 * 60 * 1000,
     endTime: currentTime,
-    start: 0,
-    pageSize: 1000,
+    start,
+    pageSize,
   };
   let res = undefined;
   try {
