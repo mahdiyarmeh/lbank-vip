@@ -13,6 +13,7 @@ export async function syncBalances(bot: Telegraf<any>) {
     try {
       while (true) {
         const res = await getTeamList(i).then((res) => res || { data: [] });
+        console.log('----------------------------------------------------------------------',res.data)
         response.data.push(...res.data);
         i = i + 100;
         if (res.data.length < 100) break;
@@ -20,13 +21,13 @@ export async function syncBalances(bot: Telegraf<any>) {
       }
     } catch (e) {
       console.log(new Date().toString(), e);
-      i = 100000
+      i = 100000;
     }
     const users = await db.getJoinedUsers();
     const threshold = await db.getThreshold();
 
     // Update balances for all users
-    try{
+    console.log(response);
     for (const balance of response.data) {
       try {
         // Update user balances
@@ -42,9 +43,6 @@ export async function syncBalances(bot: Telegraf<any>) {
           error,
         );
       }
-    }
-    }catch(_){
-      console.log(response)
     }
 
     // Check if any joined users are now below threshold
