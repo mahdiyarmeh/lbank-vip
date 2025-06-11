@@ -15,13 +15,8 @@ export async function syncBalances(bot: Telegraf<any>) {
         const res = await getTeamList(i).then((res) => res || { data: [] });
 
         // Update balances for all users
-        console.log('a')
-        console.log(res)
-        console.log('b')
-        console.log(res.data)
         for (const balance of res.data) {
           try {
-            console.log(balance.openId)
             // Update user balances
             await db.updateUserBalances(
               balance.openId,
