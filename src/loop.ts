@@ -8,13 +8,34 @@ export async function syncBalances(bot: Telegraf<any>) {
   try {
     console.log(new Date().toString(), "Syncing balances...");
 
-    let response = { data: [] as TGetTeamListRes[] };
+    // let response = { data: [] as TGetTeamListRes[] };
     let i = 0;
     try {
       while (true) {
         const res = await getTeamList(i).then((res) => res || { data: [] });
-        console.log('----------------------------------------------------------------------',res.data)
-        response.data.push(...res.data);
+
+        // Update balances for all users
+        console.log('a')
+        console.log(res)
+        console.log('b')
+        console.log(res.data)
+        for (const balance of res.data) {
+          try {
+            console.log(balance.openId)
+            // Update user balances
+            await db.updateUserBalances(
+              balance.openId,
+              Number(balance.currencyTotalFeeAmt),
+              Number(balance.contractTotalFeeAmt),
+            );
+          } catch (error) {
+            console.error(
+              new Date().toString(),
+              `Error updating balance for UID ${balance.openId}:`,
+              error,
+            );
+          }
+        }
         i = i + 100;
         if (res.data.length < 100) break;
         if (i > 10000) break;
@@ -23,29 +44,11 @@ export async function syncBalances(bot: Telegraf<any>) {
       console.log(new Date().toString(), e);
       i = 100000;
     }
+
+    // Check if any joined users are now below threshold
     const users = await db.getJoinedUsers();
     const threshold = await db.getThreshold();
 
-    // Update balances for all users
-    console.log(response);
-    for (const balance of response.data) {
-      try {
-        // Update user balances
-        await db.updateUserBalances(
-          balance.openId,
-          Number(balance.currencyTotalFeeAmt),
-          Number(balance.contractTotalFeeAmt),
-        );
-      } catch (error) {
-        console.error(
-          new Date().toString(),
-          `Error updating balance for UID ${balance.openId}:`,
-          error,
-        );
-      }
-    }
-
-    // Check if any joined users are now below threshold
     for (const user of users) {
       try {
         // Get fresh user data with updated balances
