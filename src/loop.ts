@@ -26,6 +26,7 @@ export async function syncBalances(bot: Telegraf<any>) {
     const threshold = await db.getThreshold();
 
     // Update balances for all users
+    try{
     for (const balance of response.data) {
       try {
         // Update user balances
@@ -41,6 +42,9 @@ export async function syncBalances(bot: Telegraf<any>) {
           error,
         );
       }
+    }
+    }catch(_){
+      console.log(response)
     }
 
     // Check if any joined users are now below threshold
