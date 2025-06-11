@@ -35,7 +35,7 @@ export async function getTeamList(): Promise<
     startTime: currentTime - 12 * 30 * 24 * 60 * 60 * 1000,
     endTime: currentTime,
     start: 0,
-    pageSize: 50,
+    pageSize: 1000,
   };
   let res = undefined;
   try {
