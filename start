@@ -120,7 +120,7 @@ fi
 
 # Start new detached tmux session with output logged
 echo "Starting tmux session '$NAME'..."
-tmux new-session -d -s "$NAME" "export \$(xargs < $ENV_FILE); npm run start > $LOG_FILE 2>&1; echo 'Process exited. Check logs and retry with same name if needed.' >> $LOG_FILE"
+tmux new-session -d -s "$NAME" "export \$(xargs < $ENV_FILE); npm run start 2>&1 | tee $LOG_FILE; echo 'Process exited. Check logs and retry with same name if needed.' | tee -a $LOG_FILE"
 
 echo "Tmux session '$NAME' started and detached."
 echo "Logs are being written to $LOG_FILE"
