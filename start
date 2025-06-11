@@ -2,6 +2,7 @@
 git pull
 
 # Build the project
+rm -rf dist
 if ! npm run build; then
   echo "Build failed, exiting..."
   exit 1
