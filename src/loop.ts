@@ -12,7 +12,14 @@ export async function syncBalances(bot: Telegraf<any>) {
     let i = 0;
     try {
       while (true) {
-        const res = await getTeamList(i).then((res) => res || { data: [] });
+        const res = await getTeamList(i).then((res) => {
+          if (res?.data && res.data.length > 0) {
+            return res;
+          } else {
+            console.log(new Date().toString(), "No data returned", i);
+            return { data: [] };
+          }
+        });
 
         // Update balances for all users
         for (const balance of res.data) {
