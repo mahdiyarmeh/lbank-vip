@@ -4,6 +4,7 @@ import * as db from "../../database";
 import { i18n } from "../../locale";
 import { createInviteLink } from "../helpers/createInviteLink";
 import { isAdmin } from "../helpers/isAdmin";
+import { Markup } from "telegraf";
 
 export async function startHandler(
   ctx: BotContext,
@@ -19,8 +20,15 @@ export async function startHandler(
   await ctx.reply(welcomeMessage || i18n(lang, "greeting"));
   const user = await db.getUserByTelegramId(ctx.from!.id);
   if (!user?.uid) {
-    await ctx.reply(i18n(lang, "askUid"));
-    userState.set(ctx.from!.id, "AWAITING_UID");
+    ctx.reply(
+      i18n(lang, "askContact"),
+      Markup.keyboard([
+        [Markup.button.contactRequest(i18n(lang, "shareContact"))],
+      ])
+        .resize()
+        .oneTime(),
+    );
+    userState.set(ctx.from!.id, "AWAITING_CONTACT");
   } else {
     const threshold = await db.getThreshold();
     if (db.getTotalBalance(ctx.user) >= threshold) {

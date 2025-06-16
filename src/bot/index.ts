@@ -12,8 +12,13 @@ import { helpHandler } from "./commands/helpHandler";
 import { editWelcomeHandler } from "./commands/editWelcomeHandler";
 import { uidHandler } from "./commands/uidHandler";
 import { editWelcomeCommandHandler } from "./commands/editWelcomeCommandHandler";
+import { Agent } from "https";
+import { contactHandler } from "./commands/contactHandler";
 
-export type UserState = "AWAITING_UID" | "AWAITING_WELCOME";
+export type UserState =
+  | "AWAITING_CONTACT"
+  | "AWAITING_UID"
+  | "AWAITING_WELCOME";
 
 const userState = new Map<number, UserState>();
 
@@ -21,10 +26,12 @@ const userState = new Map<number, UserState>();
 export interface BotContext extends Context {
   user?: any;
 }
-
+const agent = new Agent({
+  family: 4, // Force IPv4
+});
 // Create bot instance
 export function createBot(token: string) {
-  const bot = new Telegraf<BotContext>(token);
+  const bot = new Telegraf<BotContext>(token, { telegram: { agent } });
 
   bot.telegram.setMyCommands([
     { command: "start", description: "Start the bot" },
@@ -35,9 +42,6 @@ export function createBot(token: string) {
 
   // Start command
   bot.start((ctx) => startHandler(ctx, bot, userState));
-
-  // Handle text messages (UID input)
-  // bot.hears(/^[^\/]/, (ctx) => );
 
   // Admin commands
   bot.command("setthreshold", async (ctx) => setthreshholdHandler(ctx));
@@ -54,9 +58,10 @@ export function createBot(token: string) {
   bot.on("new_chat_members", async (ctx) => newMemberHandler(ctx, bot));
   bot.on("left_chat_member", async (ctx) => leftMemberHandler(ctx));
 
-  // DEFAULT HANDLER - Add this at the end
-  // This catches all messages that didn't match previous handlers
   bot.on("message", async (ctx) => {
+    if (userState.get(ctx.from!.id) == "AWAITING_CONTACT")
+      await contactHandler(ctx, bot, userState);
+
     if (userState.get(ctx.from!.id) == "AWAITING_UID")
       await uidHandler(ctx, bot, userState);
 

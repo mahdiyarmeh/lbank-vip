@@ -22,6 +22,8 @@ export const messages_en = {
   uidDoesntExist: "⚠️ This UID does not exist in our records.",
   editWelcome: "send welcome message",
   editSuccess: "✅ Welcome message updated successfully.",
+  askContact: "Please share your contact info with us",
+  shareContact: "📱 Share Contact",
   help: `
 🆘 Available Commands:
 
@@ -59,6 +61,8 @@ export const messages_fa: Record<keyof typeof messages_en, string> = {
   uidDoesntExist: "⚠️ این شناسه کاربری در سیستم وجود ندارد.",
   editWelcome: "پیام خوش آمد را ارسال کنید",
   editSuccess: "پیام خوش آمد با موفقیت ویرایش شد.",
+  askContact: "لطفا اطلاعات حسابتان را به اشتراک بگذارید",
+  shareContact: "📱 اشتراک  حساب",
   help: `
 🆘 دستورات قابل استفاده:
 

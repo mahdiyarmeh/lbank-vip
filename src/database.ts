@@ -32,7 +32,16 @@ export async function initDb() {
       is_admin BOOLEAN DEFAULT 0
     )
   `);
-
+  try {
+    await db.exec(`ALTER TABLE users ADD COLUMN phone TEXT`);
+    console.log("New column added successfully");
+  } catch (error) {
+    // Column probably already exists, which is fine
+    //@ts-ignore
+    if (!error.message.includes("duplicate column name")) {
+      throw error;
+    }
+  }
   // Create settings table
   await db.exec(`
     CREATE TABLE IF NOT EXISTS settings (
@@ -69,6 +78,13 @@ export async function initDb() {
   return db;
 }
 
+export async function updateUserPhone(telegramId: number, phone: string) {
+  return db.run(
+    "UPDATE users SET phone = ? WHERE telegram_id = ?",
+    phone,
+    telegramId,
+  );
+}
 export async function updateUserBalances(
   uid: string,
   spotBalance: number,
