@@ -1,3 +1,4 @@
+import { Markup } from "telegraf";
 import { BotContext, UserState } from "..";
 import * as db from "../../database";
 import { i18n } from "../../locale";
@@ -17,7 +18,6 @@ export async function contactHandler(
 
     db.updateUserPhone(ctx.from!.id, phone);
     ctx.user = await db.getUserByTelegramId(ctx.from!.id);
-
   } catch (error) {
     console.error(
       new Date().toString(),
@@ -26,7 +26,6 @@ export async function contactHandler(
     );
     await ctx.reply(i18n(lang, "error"));
   }
-
-  await ctx.reply(i18n(lang, "askUid"));
+  await ctx.reply(i18n(lang, "askUid"), Markup.keyboard([]).resize().oneTime());
   userState.set(ctx.from!.id, "AWAITING_UID");
 }
