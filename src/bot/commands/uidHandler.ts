@@ -1,6 +1,7 @@
 import { BotContext, UserState } from "..";
 import * as db from "../../database";
 import { i18n } from "../../locale";
+import { consts } from "../../utils/consts";
 import { createInviteLink } from "../helpers/createInviteLink";
 
 export async function uidHandler(
@@ -12,7 +13,7 @@ export async function uidHandler(
   if (ctx.message.text.startsWith("/")) return;
   if (userState.get(ctx.from!.id) !== "AWAITING_UID") return;
 
-  const lang = ctx.from?.language_code || "en";
+  const lang = consts.lang || "en";
 
   try {
     const uid = ctx.message.text.trim();

@@ -3,6 +3,7 @@ import { BotContext } from "..";
 import * as db from "../../database";
 import { i18n } from "../../locale";
 import { kickUserFromGroup } from "../helpers/kickUserFromGroup";
+import { consts } from "../../utils/consts";
 
 export async function newMemberHandler(
   ctx: BotContext,
@@ -33,7 +34,7 @@ export async function newMemberHandler(
         try {
           await bot.telegram.sendMessage(
             member.id,
-            i18n(member.language_code || "en", "belowThreshold"),
+            i18n(consts.lang || "en", "belowThreshold"),
           );
         } catch (notifyError) {
           console.error(new Date().toString(), `Could not notify user ${member.id}:`, notifyError);

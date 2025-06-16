@@ -1,7 +1,8 @@
 import * as db from "./database";
 import { Telegraf } from "telegraf";
 import { kickUserFromGroup } from "./bot/helpers/kickUserFromGroup";
-import { getTeamList, TGetTeamListRes } from "./services/getTeamList";
+import { getTeamList } from "./services/getTeamList";
+import { consts } from "./utils/consts";
 
 // Sync balances from API
 export async function syncBalances(bot: Telegraf<any>) {
@@ -70,7 +71,7 @@ export async function syncBalances(bot: Telegraf<any>) {
 
             // Notify user
             try {
-              const lang = user.language_code || "en";
+              const lang = consts.lang || "en";
               await bot.telegram.sendMessage(
                 user.telegram_id,
                 lang === "fa"
