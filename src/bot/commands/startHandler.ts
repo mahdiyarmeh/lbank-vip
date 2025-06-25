@@ -33,10 +33,15 @@ export async function startHandler(
     const threshold = await db.getThreshold();
     if (db.getTotalBalance(ctx.user) >= threshold) {
       const link = await createInviteLink(bot, process.env.GROUP_ID!);
-      await ctx.reply(i18n(lang, "inviteSent"));
-      await ctx.reply(link);
+      await ctx.reply(i18n(lang, "inviteSent", link));
+      // await ctx.reply(link);
     } else {
-      await ctx.reply(i18n(lang, "belowThreshold"));
+      await ctx.reply(
+        i18n(lang, "belowThreshold", {
+          threshold,
+          balance: db.getTotalBalance(ctx.user),
+        }),
+      );
     }
   }
 }

@@ -23,6 +23,6 @@ export async function statsHandler(ctx: BotContext) {
 
   await ctx.replyWithDocument({
     source: stream,
-    filename: "users_stats.csv",
+    filename: `stats ${new Date().toLocaleString()}- .csv`,
   });
 }

@@ -29,7 +29,7 @@ export async function uidHandler(
 
     if (uidUser?.telegram_id) {
       await ctx.reply(i18n(lang, "uidAlreadyUsed"));
-      userState.delete(ctx.from!.id);
+      // userState.delete(ctx.from!.id);
       return;
     }
 
@@ -50,12 +50,12 @@ export async function uidHandler(
     await ctx.reply(i18n(lang, "uidSaved"));
 
     const threshold = await db.getThreshold();
-    if (db.getTotalBalance(ctx.user) >= threshold) {
+    const balance = db.getTotalBalance(ctx.user);
+    if (balance >= threshold) {
       const link = await createInviteLink(bot, process.env.GROUP_ID!);
-      await ctx.reply(i18n(lang, "inviteSent"));
-      await ctx.reply(link);
+      await ctx.reply(i18n(lang, "inviteSent", link));
     } else {
-      await ctx.reply(i18n(lang, "belowThreshold"));
+      await ctx.reply(i18n(lang, "belowThreshold", { threshold, balance }));
     }
   } catch (error) {
     console.error(new Date().toString(), "Error processing UID input:", error);

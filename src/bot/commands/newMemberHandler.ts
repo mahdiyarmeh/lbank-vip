@@ -12,6 +12,7 @@ export async function newMemberHandler(
   if (!ctx.chat || !ctx.message || !("new_chat_members" in ctx.message)) return;
   if (ctx.chat.id.toString() !== process.env.GROUP_ID) return;
 
+  const lang = consts.lang || "en";
   for (const member of ctx.message.new_chat_members) {
     try {
       // Find user in database
@@ -34,17 +35,28 @@ export async function newMemberHandler(
         try {
           await bot.telegram.sendMessage(
             member.id,
-            i18n(consts.lang || "en", "belowThreshold"),
+            i18n(lang, "belowThreshold", {
+              threshold,
+              balance: db.getTotalBalance(user),
+            }),
           );
         } catch (notifyError) {
-          console.error(new Date().toString(), `Could not notify user ${member.id}:`, notifyError);
+          console.error(
+            new Date().toString(),
+            `Could not notify user ${member.id}:`,
+            notifyError,
+          );
         }
       } else {
         // Valid join - mark as joined
         await db.markUserJoined(member.id);
       }
     } catch (error) {
-      console.error(new Date().toString(), `Error processing new member ${member.id}:`, error);
+      console.error(
+        new Date().toString(),
+        `Error processing new member ${member.id}:`,
+        error,
+      );
     }
   }
 }
