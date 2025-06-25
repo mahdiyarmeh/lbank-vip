@@ -14,6 +14,7 @@ export async function contactHandler(
   const lang = consts.lang || "en";
 
   try {
+
     const phone = ctx.message.contact.phone_number;
 
     db.updateUserPhone(ctx.from!.id, phone);
