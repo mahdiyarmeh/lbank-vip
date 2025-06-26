@@ -55,7 +55,7 @@ export async function uidHandler(
       const link = await createInviteLink(bot, process.env.GROUP_ID!);
       await ctx.reply(i18n(lang, "inviteSent", link));
     } else {
-      await ctx.reply(i18n(lang, "belowThreshold", [threshold, balance]));
+      await ctx.reply(i18n(lang, "belowThreshold", threshold, balance));
     }
   } catch (error) {
     console.error(new Date().toString(), "Error processing UID input:", error);

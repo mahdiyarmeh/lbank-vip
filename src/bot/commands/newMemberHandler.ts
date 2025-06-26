@@ -35,7 +35,7 @@ export async function newMemberHandler(
         try {
           await bot.telegram.sendMessage(
             member.id,
-            i18n(lang, "belowThreshold", [threshold, db.getTotalBalance(user)]),
+            i18n(lang, "belowThreshold", threshold, db.getTotalBalance(user)),
           );
         } catch (notifyError) {
           console.error(
