@@ -43,10 +43,7 @@ export async function startHandler(
       // await ctx.reply(link);
     } else {
       await ctx.reply(
-        i18n(lang, "belowThreshold", {
-          threshold,
-          balance: db.getTotalBalance(ctx.user),
-        }),
+        i18n(lang, "belowThreshold", [threshold, db.getTotalBalance(ctx.user)]),
         Markup.keyboard([[Markup.button.text(i18n(lang, "support"))]])
           .resize()
           .oneTime(),

@@ -28,7 +28,7 @@ Please contact support if you believe this is an error. 📩
 
 Your current balance is below the minimum threshold for access.
 
-Required: {threshold} | Your Balance: {balance}
+Required: {0} | Your Balance: {1}
   `,
 
   inviteSent: `
@@ -256,7 +256,7 @@ export const messages_fa: Record<keyof typeof messages_en, string> = {
 
 موجودی شما کمتر از حداقل لازم برای دسترسی است.
 
-مقدار مورد نیاز: {threshold} | موجودی شما: {balance}
+مقدار مورد نیاز: {0} | موجودی شما: {1}
   `,
 
   inviteSent: `
