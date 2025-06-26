@@ -73,6 +73,13 @@ This function is restricted to authorized personnel only.
 
 Unauthorized access is prohibited. 🚨
   `,
+  supportSet: `
+👨‍💼  system Support id updated  👨‍💼
+
+Support id is set to {0} 
+
+Effective immediately. ⏱️
+  `,
 
   thresholdSet: `
 📈  System Threshold Updated  📈
@@ -102,6 +109,13 @@ User {0} has been granted management privileges.
 All permissions activated. 🚀
   `,
 
+  invalidSupport: `
+📛  Invalid Configuration  📛
+
+Please enter a valid username for the support.
+
+it should be like @username. 🔢
+  `,
   invalidThreshold: `
 📛  Invalid Configuration  📛
 
@@ -189,6 +203,12 @@ This helps prevent unauthorized access. 🛡️
   `,
 
   shareContact: "📲 Share Contact Details",
+  support: "👨‍💼 Support",
+  supportMessage: `
+👨‍💼  Support  👨‍💼
+
+if you have a problem contact {0}
+  `,
 
   help: `
 🆘  Account Management Portal  🆘
@@ -200,6 +220,7 @@ This helps prevent unauthorized access. 🛡️
 ▸ /forcekick - Enforce balance requirements
 ▸ /stats - View system analytics
 ▸ /editWelcome - Customize greeting message
+▸ /setsupport <@username> - change support
 
 Need assistance? Contact our support team! 💬
   `,
@@ -259,7 +280,7 @@ export const messages_fa: Record<keyof typeof messages_en, string> = {
   uidNotFound: `
 ❓  تأیید هویت ناموفق  ❓
 
-UID ارائه شده در سیستم یافت نشد.
+شناسه(UID) ارائه شده در سیستم یافت نشد.
 
 ▸ از صحت UID اطمینان حاصل کنید
 ▸ در صورت تکرار با پشتیبانی تماس بگیرید 📞
@@ -268,7 +289,7 @@ UID ارائه شده در سیستم یافت نشد.
   uidSaved: `
 🔏  هویت تأیید شد  🔏
 
-UID شما با موفقیت ثبت گردید.
+شناسه(UID) شما با موفقیت ثبت گردید.
 
 از همکاری شما متشکریم! 🤝
   `,
@@ -348,7 +369,7 @@ UID شما با موفقیت ثبت گردید.
   cannotChangeUid: `
 🚷  ثبت دائمی  🚷
 
-UID پس از ثبت قابل تغییر نیست.
+شناسه(UID) پس از ثبت قابل تغییر نیست.
 
 این یک اقدام امنیتی است. 🛡️
   `,
@@ -364,9 +385,9 @@ UID پس از ثبت قابل تغییر نیست.
   uidDoesntExist: `
 ❓  رکورد یافت نشد  ❓
 
-UID ارائه شده در سیستم وجود ندارد.
+شناسه(UID) ارائه شده در سیستم وجود ندارد.
 
-▸ UID خود را بررسی کنید
+▸ شناسه(UID) خود را بررسی کنید
 ▸ با پشتیبانی ثبت نام تماس بگیرید 📋
   `,
 
@@ -394,6 +415,27 @@ UID ارائه شده در سیستم وجود ندارد.
   `,
 
   shareContact: "📲 اشتراک اطلاعات تماس",
+  support: "👨‍💼 پشتیبانی",
+  supportMessage: `
+👨‍💼  پشتیبانی  👨‍💼
+
+اگر مشکلی داشتید پشتیبانی ما در خدمت شماست 
+
+{0}
+  `,
+  supportSet: `
+👨‍💼  آیدی پشتیبانی آپدیت شد  👨‍💼
+
+آیدی پشتیبانی از این به بعد {0} است.
+
+تغییرات بلافاصله اعمال می‌شوند. ⚡
+  `,
+  invalidSupport: `
+📛  آیدی غلط  📛
+
+لطفا یک آیدی درست استفاده کنید.
+
+  `,
 
   help: `
 🆘  پنل مدیریت حساب  🆘
@@ -405,6 +447,7 @@ UID ارائه شده در سیستم وجود ندارد.
 ▸ /forcekick - اعمال نیازمندی‌های موجودی
 ▸ /stats - مشاهده آمار سیستم
 ▸ /editWelcome - سفارشی‌سازی پیام خوشامد
+▸ /setsupport <@username> - تغییر پشتیبانی
 
 نیاز به کمک دارید؟ با پشتیبانی تماس بگیرید! 💬
   `,

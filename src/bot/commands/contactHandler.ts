@@ -14,7 +14,6 @@ export async function contactHandler(
   const lang = consts.lang || "en";
 
   try {
-
     const phone = ctx.message.contact.phone_number;
 
     db.updateUserPhone(ctx.from!.id, phone);
@@ -27,6 +26,11 @@ export async function contactHandler(
     );
     await ctx.reply(i18n(lang, "error"));
   }
-  await ctx.reply(i18n(lang, "askUid"), Markup.keyboard([]).resize().oneTime());
+  await ctx.reply(
+    i18n(lang, "askUid"),
+    Markup.keyboard([[Markup.button.contactRequest(i18n(lang, "support"))]])
+      .resize()
+      .oneTime(),
+  );
   userState.set(ctx.from!.id, "AWAITING_UID");
 }

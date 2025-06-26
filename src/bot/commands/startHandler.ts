@@ -24,6 +24,7 @@ export async function startHandler(
       i18n(lang, "askContact"),
       Markup.keyboard([
         [Markup.button.contactRequest(i18n(lang, "shareContact"))],
+        [Markup.button.text(i18n(lang, "support"))],
       ])
         .resize()
         .oneTime(),
@@ -33,7 +34,12 @@ export async function startHandler(
     const threshold = await db.getThreshold();
     if (db.getTotalBalance(ctx.user) >= threshold) {
       const link = await createInviteLink(bot, process.env.GROUP_ID!);
-      await ctx.reply(i18n(lang, "inviteSent", link));
+      await ctx.reply(
+        i18n(lang, "inviteSent", link),
+        Markup.keyboard([[Markup.button.text(i18n(lang, "support"))]])
+          .resize()
+          .oneTime(),
+      );
       // await ctx.reply(link);
     } else {
       await ctx.reply(
@@ -41,6 +47,9 @@ export async function startHandler(
           threshold,
           balance: db.getTotalBalance(ctx.user),
         }),
+        Markup.keyboard([[Markup.button.text(i18n(lang, "support"))]])
+          .resize()
+          .oneTime(),
       );
     }
   }

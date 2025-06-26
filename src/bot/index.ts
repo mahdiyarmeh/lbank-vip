@@ -14,6 +14,10 @@ import { uidHandler } from "./commands/uidHandler";
 import { editWelcomeCommandHandler } from "./commands/editWelcomeCommandHandler";
 import { Agent } from "https";
 import { contactHandler } from "./commands/contactHandler";
+import { i18n } from "../locale";
+import { consts } from "../utils/consts";
+import { supportHandler } from "./commands/supportHandler";
+import { setSupportHandler } from "./commands/setSupportHandler";
 
 export type UserState =
   | "AWAITING_CONTACT"
@@ -45,6 +49,7 @@ export function createBot(token: string) {
 
   // Admin commands
   bot.command("setthreshold", async (ctx) => setthreshholdHandler(ctx));
+  bot.command("setsupport", async (ctx) => setSupportHandler(ctx));
   bot.command("threshold", async (ctx) => threshholdHandler(ctx));
   bot.command("addadmin", async (ctx) => addAdminHandler(ctx));
   bot.command("stats", async (ctx) => statsHandler(ctx));
@@ -59,6 +64,11 @@ export function createBot(token: string) {
   bot.on("left_chat_member", async (ctx) => leftMemberHandler(ctx));
 
   bot.on("message", async (ctx) => {
+    if (
+      "text" in ctx.message &&
+      ctx.message.text === i18n(consts.lang || "en", "support")
+    )
+      await supportHandler(ctx);
     if (userState.get(ctx.from!.id) == "AWAITING_CONTACT")
       await contactHandler(ctx, bot, userState);
 

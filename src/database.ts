@@ -62,11 +62,22 @@ export async function initDb() {
       process.env.DEFAULT_THRESHOLD || "100",
     );
   }
+  const support = await db.get(
+    "SELECT value FROM settings WHERE key = ?",
+    "support",
+  );
+  if (!support) {
+    await db.run(
+      "INSERT INTO settings (key, value) VALUES (?, ?)",
+      "support",
+      "@admin",
+    );
+  }
   const welcomeMessage = await db.get(
     "SELECT value FROM settings WHERE key = ?",
     "welcome_message",
   );
-  if (!threshold) {
+  if (!welcomeMessage) {
     await db.run(
       "INSERT INTO settings (key, value) VALUES (?, ?)",
       "welcome_message",
@@ -144,6 +155,20 @@ export async function getUsersCsv() {
 }
 
 // Settings functions
+export async function getSupportId() {
+  const result = await db.get(
+    "SELECT value FROM settings WHERE key = ?",
+    "support",
+  );
+  return result.value as string;
+}
+export async function setSupportId(value: string) {
+  return db.run(
+    "UPDATE settings SET value = ? WHERE key = ?",
+    value,
+    "support",
+  );
+}
 export async function getWelcomeMessage() {
   const result = await db.get(
     "SELECT value FROM settings WHERE key = ?",
