@@ -28,7 +28,7 @@ export async function contactHandler(
   }
   await ctx.reply(
     i18n(lang, "askUid"),
-    Markup.keyboard([[Markup.button.contactRequest(i18n(lang, "support"))]])
+    Markup.keyboard([[Markup.button.text(i18n(lang, "support"))]])
       .resize()
       .oneTime(),
   );
